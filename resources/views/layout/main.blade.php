@@ -12,10 +12,12 @@
             <!-- Logo (Movie SVG) -->
             <ul class="flex flex-col md:flex-row items-center space-x-8">
                 <li>
-                    <img src="{{ asset('images/Movie.svg') }}" alt="Logo" class="w-12 h-auto">
+                    <a href="{{route('movie.index')}}">
+                        <img src="{{ asset('images/Movie.svg') }}" alt="Logo" class="w-12 h-auto">
+                    </a>
                 </li>
                 <li class="md:ml-16 mt-3 md:mt-0">
-                    <a href="" class="hover:text-red-600">Movies</a>
+                    <a href="{{route('movie.index')}}" class="hover:text-red-600">Movies</a>
                 </li>                
                 <li class="md:ml-6 mt-3 md:mt-0">
                     <a href="" class="hover:text-red-600">TV Shows</a>
