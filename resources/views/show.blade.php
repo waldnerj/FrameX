@@ -45,24 +45,52 @@
                 </div>
             </div>
             
-
+            <!-- Play Trailer -->
             @if (isset($movie['videos']['results']) && count($movie['videos']['results']) > 0)
-            <div class="mt-10">
-                <a href="https://youtube.com/watch?v={{ $movie['videos']['results'][0]['key'] }}" class="inline-flex items-center bg-red-600 text-white rounded-lg font-semibold px-6 py-3 hover:bg-red-700 transition duration-200">
-                    <img src="{{ asset('images/play.svg') }}" alt="Play" class="w-6 h-6">
-                    <span class="ml-3">Play Trailer</span>
-                </a>
-            </div>
-        @else
-            <div class="mt-10">
-                <p class="text-gray-400">No trailer available for this movie.</p>
-            </div>
-        @endif
-        
+                <div class="mt-10">
+                    <a href="#" id="playTrailerBtn" class="inline-flex items-center bg-red-600 text-white rounded-lg font-semibold px-6 py-3 hover:bg-red-700 transition duration-200">
+                        <img src="{{ asset('images/play.svg') }}" alt="Play" class="w-6 h-6">
+                        <span class="ml-3">Play Trailer</span>
+                    </a>
+                </div>
+
+                <!-- Container für das eingebettete Video, zunächst verborgen -->
+                <div id="trailerContainer" class="mt-6 hidden">
+                    <h3 class="text-xl font-semibold text-gray-800">Trailer:</h3>
+                    <div id="trailerIframeContainer" class="mt-4">
+                        <!-- iFrame wird hier dynamisch eingefügt -->
+                    </div>
+                </div>
+
+                <script>
+                    const playTrailerBtn = document.getElementById('playTrailerBtn');
+                    const trailerContainer = document.getElementById('trailerContainer');
+                    const trailerIframeContainer = document.getElementById('trailerIframeContainer');
+                    const videoKey = '{{ $movie["videos"]["results"][0]["key"] }}';
+
+                    // Event Listener für den Play Trailer Button
+                    playTrailerBtn.addEventListener('click', function (event) {
+                        event.preventDefault();
+
+                        // Stelle sicher, dass der Trailer-Container sichtbar wird
+                        trailerContainer.classList.remove('hidden');
+
+                        // Füge das iFrame hinzu, um das Video anzuzeigen
+                        trailerIframeContainer.innerHTML = `
+                            <iframe width="100%" height="315" src="https://www.youtube.com/embed/${videoKey}?autoplay=1" 
+                            frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        `;
+                    });
+                </script>
+            @else
+                <div class="mt-10">
+                    <p class="text-gray-400">No trailer available for this movie.</p>
+                </div>
+            @endif
         </div>
     </div>
 </div>
-
+    <!-- Cast -->
 <div class="movie-cast border-b border-grey-800 bg-black">
     <div class="container mx-auto px-4 py-16">
         <h2 class="text-4xl font-semibold text-white">Cast</h2>
@@ -93,6 +121,7 @@
         </div>
     </div>
 </div>
+    <!-- Images -->
 <div class="movie-images">
     <div class="container mx-auto px-4 py-16">
         <h2 class="text-4xl font-semibold">Images</h2>
