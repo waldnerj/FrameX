@@ -4,7 +4,7 @@
     <div class="actors-list container mx-auto px-4 pt-16">
         <h1 class="text-4xl font-bold mb-6 text-red-600">Actors</h1>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            @foreach (array_slice($actors, 0, 10) as $actor)
+            @foreach ($actors as $actor)
                 <div class="mt-8">
                     <a href="#">
                         <img src="{{ 'https://image.tmdb.org/t/p/w500' . $actor['profile_path'] }}" 
