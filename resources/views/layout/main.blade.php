@@ -20,10 +20,10 @@
                     <a href="{{route('movie.index')}}" class="hover:text-red-600">Movies</a>
                 </li>                
                 <li class="md:ml-6 mt-3 md:mt-0">
-                    <a href="" class="hover:text-red-600">TV Shows</a>
+                    <a href="{{route('tv.show')}}" class="hover:text-red-600">TV Shows</a>
                 </li>
                 <li class="md:ml-6 mt-3 md:mt-0">
-                    <a href="" class="hover:text-red-600">Actors</a>
+                    <a href="{{route('actor.show')}}" class="hover:text-red-600">Actors</a>
                 </li>
             </ul>
             
