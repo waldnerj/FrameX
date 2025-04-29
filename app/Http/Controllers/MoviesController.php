@@ -47,4 +47,24 @@ class MoviesController extends Controller
             'movie' => $movie,
         ]);
     }
+    public function actors()
+    {
+        $actors = Http::withToken(config('services.tmdb.token'))
+            ->get('https://api.themoviedb.org/3/person/popular')
+            ->json('results');
+        return view('actor', [
+            'actors' => $actors,
+        ]);
+    }
+    public function tvShows()
+    {
+        $tvShows = Http::withToken(config('services.tmdb.token'))
+            ->get('https://api.themoviedb.org/3/tv/popular')
+            ->json('results');
+            
+        return view('tvShows', [
+            'tvShows' => $tvShows,
+        ]);
+        
+    }
 }
