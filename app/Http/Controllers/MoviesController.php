@@ -52,7 +52,6 @@ class MoviesController extends Controller
         $actors = Http::withToken(config('services.tmdb.token'))
             ->get('https://api.themoviedb.org/3/person/popular')
             ->json('results');
-            dump($actors);
         return view('actor', [
             'actors' => $actors,
         ]);
