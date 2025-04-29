@@ -7,3 +7,4 @@ Route::get('/', 'App\Http\Controllers\MoviesController@index')->name('movie.inde
 Route::get('/movies/{movie}', 'App\Http\Controllers\MoviesController@show')->name('movie.show');
 Route::get('/actor', 'App\Http\Controllers\MoviesController@actors')->name('actor.show');
 Route::get('/tv', 'App\Http\Controllers\MoviesController@tvShows')->name('tv.show');
+Route::get('/tv/{tv}', 'App\Http\Controllers\MoviesController@tvShow')->name('tv1.show');
