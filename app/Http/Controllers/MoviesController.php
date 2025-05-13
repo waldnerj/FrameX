@@ -67,4 +67,16 @@ class MoviesController extends Controller
         ]);
         
     }
+
+    public function actorShow($id)
+{
+    $actor = Http::withToken(config('services.tmdb.token'))
+        ->get("https://api.themoviedb.org/3/person/{$id}?append_to_response=combined_credits,images")
+        ->json();
+
+    return view('showActor', [
+        'actor' => $actor,
+    ]);
+}
+
 }
