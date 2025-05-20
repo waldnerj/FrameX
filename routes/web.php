@@ -1,13 +1,18 @@
 <?php
 
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MoviesController;
 
-Route::get('/', 'App\Http\Controllers\MoviesController@index')->name('movie.index');
-Route::get('/movies/{movie}', 'App\Http\Controllers\MoviesController@show')->name('movie.show');
-Route::get('/actor', 'App\Http\Controllers\MoviesController@actors')->name('actor.show');
-Route::get('/tv', 'App\Http\Controllers\MoviesController@tvShows')->name('tv.show');
+Route::get('/', [MoviesController::class, 'index'])->name('movies.movieIndex');
 
-Route::get('/actors/{id}', [MoviesController::class, 'actorShow'])->name('actors.show');
-Route::get('/movies/{id}', [MoviesController::class, 'show'])->name('movies.show');
+// Movies
+Route::get('/movies/{id}', [MoviesController::class, 'show'])->name('movies.showMovie');
+
+// Actors
+Route::get('/actors', [MoviesController::class, 'actors'])->name('movies.actorIndex');
+Route::get('/actors/{id}', [MoviesController::class, 'actorShow'])->name('movies.showActor');
+
+// TV Shows
+Route::get('/tv', [MoviesController::class, 'tv'])->name('movies.tvIndex');
+Route::get('/tv/{id}', [MoviesController::class, 'tvShow'])->name('movies.showTv');
+

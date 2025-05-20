@@ -28,7 +28,7 @@ class MoviesController extends Controller
         
         
 
-        return view('index',[
+        return view('movies.movieIndex',[
             'popularMovies' => $popularMovies,
             'nowPlayingMovies' => $nowPlayingMovies,
             'genres' => $genres,
@@ -43,40 +43,57 @@ class MoviesController extends Controller
 
             
 
-        return view('show',[
+        return view('movies.showMovie',[
             'movie' => $movie,
         ]);
     }
+
+
+//---------------------------------------------------------------------------
     public function actors()
     {
         $actors = Http::withToken(config('services.tmdb.token'))
             ->get('https://api.themoviedb.org/3/person/popular')
             ->json('results');
-        return view('actor', [
+        return view('movies.actorIndex', [
             'actors' => $actors,
         ]);
     }
-    public function tvShows()
-    {
-        $tvShows = Http::withToken(config('services.tmdb.token'))
-            ->get('https://api.themoviedb.org/3/tv/popular')
-            ->json('results');
-            
-        return view('tvShows', [
-            'tvShows' => $tvShows,
-        ]);
-        
-    }
-
     public function actorShow($id)
-{
+    {
     $actor = Http::withToken(config('services.tmdb.token'))
         ->get("https://api.themoviedb.org/3/person/{$id}?append_to_response=combined_credits,images")
         ->json();
 
-    return view('showActor', [
+    return view('movies.showActor', [
         'actor' => $actor,
     ]);
+    }
+
+//---------------------------------------------------------------------------
+
+public function tv()
+{
+    $tvShows = Http::withToken(config('services.tmdb.token'))
+        ->get('https://api.themoviedb.org/3/tv/popular')
+        ->json('results');
+
+    return view('movies.tvIndex', [
+        'tvShows' => $tvShows,
+    ]);
 }
+
+public function tvShow($id)
+{
+    $tvShow = Http::withToken(config('services.tmdb.token'))
+        ->get("https://api.themoviedb.org/3/tv/{$id}?append_to_response=credits,images")
+        ->json();
+
+    return view('movies.showTV', [
+        'tvShow' => $tvShow,
+    ]);
+}
+
+
 
 }

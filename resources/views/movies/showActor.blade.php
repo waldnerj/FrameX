@@ -27,7 +27,7 @@
             @foreach ($actor['combined_credits']['cast'] as $credit)
                 @if ($credit['media_type'] === 'movie' && isset($credit['poster_path']))
                     <div class="mt-2">
-                        <a href="{{ route('movies.show', $credit['id']) }}">
+                        <a href="{{ route('movies.showMovie', $credit['id']) }}">
                             <img src="{{ 'https://image.tmdb.org/t/p/w500' . $credit['poster_path'] }}" 
                                  alt="{{ $credit['title'] ?? $credit['name'] }}" 
                                  class="hover:opacity-75 transition ease-in-out duration-150 rounded-md shadow-lg">
