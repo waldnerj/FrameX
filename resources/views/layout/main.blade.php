@@ -9,7 +9,6 @@
 <body class="font-sans bg-black text-white">
     <nav class="border-b border-gray-800">
         <div class="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between px-6 py-6">
-            <!-- Logo (Movie SVG) -->
             <ul class="flex flex-col md:flex-row items-center space-x-8">
                 <li>
                     <a href="{{route('movies.movieIndex')}}">
@@ -35,11 +34,42 @@
                 </div>
                 
                 <!-- Avatar (Right aligned) -->
-                <div class="md:ml-auto mt-3 md:mt-0">
-                    <a href="">
-                        <img src="{{ asset('images/avatar.svg') }}" alt="avatar" class="rounded-full w-10 h-10 border-2 border-red-600">
-                    </a>
-                </div>
+                <!-- Authentifizierungsbereich -->
+<div class="md:ml-auto mt-3 md:mt-0">
+    @auth
+        @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
+            <!-- Jetstream: Profilbild mit Dropdown -->
+            <x-dropdown align="right" width="48">
+                <x-slot name="trigger">
+                    <button class="flex items-center text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
+                        <img class="h-10 w-10 rounded-full object-cover border-2 border-red-600" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
+                    </button>
+                </x-slot>
+
+                <x-slot name="content">
+                    <!-- Profil -->
+                    <x-dropdown-link href="{{ route('profile.show') }}">
+                        {{ __('Profil') }}
+                    </x-dropdown-link>
+
+                    <!-- Logout -->
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <x-dropdown-link href="{{ route('logout') }}"
+                                         onclick="event.preventDefault(); this.closest('form').submit();">
+                            {{ __('Abmelden') }}
+                        </x-dropdown-link>
+                    </form>
+                </x-slot>
+            </x-dropdown>
+        @endif
+    @else
+        <!-- Login & Registrieren -->
+        <a href="{{ route('login') }}" class="text-sm text-white hover:text-red-500">Login</a>
+        <a href="{{ route('register') }}" class="ml-4 text-sm text-white hover:text-red-500">Registrieren</a>
+    @endauth
+</div>
+
             </div>
         </div>
     </nav>

@@ -16,3 +16,11 @@ Route::get('/actors/{id}', [MoviesController::class, 'actorShow'])->name('movies
 Route::get('/tv', [MoviesController::class, 'tv'])->name('movies.tvIndex');
 Route::get('/tv/{id}', [MoviesController::class, 'tvShow'])->name('movies.showTv');
 
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/', [MoviesController::class, 'index'])->name('movies.movieIndex');
+});

@@ -3,14 +3,11 @@
 @section('content')
 <div class="movie-info border-b border-gray-800 bg-black">
     <div class="container mx-auto px-4 py-16 flex flex-col md:flex-row">
-        <!-- Movie Image -->
         <img src="{{ 'https://image.tmdb.org/t/p/w500' . $movie['poster_path'] }}" alt="{{ $movie['title'] }}" class="w-96 rounded-lg shadow-lg">
         
-        <!-- Movie Details -->
         <div class="ml-16 max-w-2xl">
             <h2 class="text-4xl font-semibold text-white">{{ $movie['title'] }}</h2>
             
-            <!-- Rating and Movie Info -->
             <div class="flex items-center text-gray-400 text-sm mt-2">
                 <img src="{{ asset('images/star.svg') }}" alt="Star" class="w-5 h-5 text-red-600">
                 <span class="ml-1 text-red-600">{{ $movie['vote_average'] * 10 . '%' }}</span>
@@ -24,12 +21,10 @@
                 </span>
             </div>
 
-            <!-- Movie Description -->
             <p class="text-gray-300 mt-6 leading-relaxed">
                 {{ $movie['overview'] }}
             </p>
             
-            <!-- Featured Cast -->
             <div class="mt-10">
                 <h4 class="text-white font-semibold">Featured Cast</h4>
                 <div class="flex mt-4">
@@ -58,11 +53,9 @@
 </div>
 
 
-                <!-- Container für das eingebettete Video, zunächst verborgen -->
                 <div id="trailerContainer" class="mt-6 hidden">
                     <h3 class="text-xl font-semibold text-gray-800">Trailer:</h3>
                     <div id="trailerIframeContainer" class="mt-4">
-                        <!-- iFrame wird hier dynamisch eingefügt -->
                     </div>
                 </div>
 
@@ -73,10 +66,8 @@
                     const videoKey = '{{ $movie["videos"]["results"][0]["key"] }}';
 
                     playTrailerBtn.addEventListener('click', function () {
-                        // Sichtbar machen
                         trailerContainer.classList.remove('hidden');
 
-                        // iFrame einfügen und Autoplay starten
                         trailerIframeContainer.innerHTML = `
                             <iframe width="100%" height="315" 
                                 src="https://www.youtube.com/embed/${videoKey}?autoplay=1" 
@@ -85,7 +76,6 @@
                             </iframe>
                         `;
 
-                        // Scrollen zum Trailer
                         trailerContainer.scrollIntoView({ behavior: 'smooth' });
                     });
                 </script>
@@ -98,7 +88,6 @@
     </div>
 </div>
 
-<!-- Cast -->
 <div class="movie-cast border-b border-gray-800 bg-black">
     <div class="container mx-auto px-4 py-16">
         <h2 class="text-4xl font-semibold text-white">Cast</h2>
@@ -125,7 +114,7 @@
     </div>
 </div>
 
-<!-- Images -->
+
 <div class="movie-images bg-black">
     <div class="container mx-auto px-4 py-16">
         <h2 class="text-4xl font-semibold text-white">Images</h2>
