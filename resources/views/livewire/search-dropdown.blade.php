@@ -27,8 +27,16 @@
         </div>
     </div>
 
+    <!-- Debug Information (remove this in production) -->
+    @if($debugInfo && app()->environment('local'))
+        <div class="absolute z-50 bg-yellow-600 text-black text-xs p-2 rounded mt-1 w-full">
+            Debug: {{ $debugInfo }}
+        </div>
+    @endif
+
+    <!-- Results Dropdown -->
     <div 
-        x-show="open && $wire.searchResults.length > 0" 
+        x-show="open" 
         x-transition:enter="transition ease-out duration-200"
         x-transition:enter-start="opacity-0 scale-95"
         x-transition:enter-end="opacity-100 scale-100"
@@ -87,16 +95,10 @@
                     </button>
                 @endforeach
             </div>
+        @elseif(strlen($search) >= 2 && !$isLoading)
+            <div class="py-4 px-4 text-center">
+                <p class="text-gray-400 text-sm">No results found for "{{ $search }}"</p>
+            </div>
         @endif
     </div>
-
-    @if(strlen($search) >= 2 && empty($searchResults))
-        <div 
-            x-show="open"
-            class="absolute z-50 bg-gray-800 text-white rounded-md w-full mt-2 shadow-lg border border-gray-700 py-4 px-4"
-            style="display: none;"
-        >
-            <p class="text-gray-400 text-sm text-center">No results found for "{{ $search }}"</p>
-        </div>
-    @endif
 </div>
