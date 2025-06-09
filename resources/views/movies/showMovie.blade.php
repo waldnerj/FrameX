@@ -7,8 +7,18 @@
         
         <div class="ml-16 max-w-2xl">
             <h2 class="text-4xl font-semibold text-white">{{ $movie['title'] }}</h2>
+
+            {{-- Watchlist Button --}}
+            @auth
+                <form action="{{ route('watchlist.toggle', $movie['id']) }}" method="POST" class="mt-4">
+                    @csrf
+                    <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded">
+                        {{ $inWatchlist ? 'Aus Watchlist entfernen' : 'Zur Watchlist hinzufügen' }}
+                    </button>
+                </form>
+            @endauth
             
-            <div class="flex items-center text-gray-400 text-sm mt-2">
+            <div class="flex items-center text-gray-400 text-sm mt-4">
                 <img src="{{ asset('images/star.svg') }}" alt="Star" class="w-5 h-5 text-red-600">
                 <span class="ml-1 text-red-600">{{ $movie['vote_average'] * 10 . '%' }}</span>
                 <span class="mx-2">|</span>       
@@ -43,20 +53,18 @@
                 </div>
             </div>
             
-            <!-- Play Trailer -->
+            {{-- Trailer --}}
             @if (isset($movie['videos']['results']) && count($movie['videos']['results']) > 0)
-<div class="mt-10">
-    <button id="playTrailerBtn" class="flex items-center bg-red-600 text-white rounded-lg font-semibold px-6 py-3 hover:bg-red-700 transition duration-200">
-        <img src="{{ asset('images/play.svg') }}" alt="Play" class="w-6 h-6">
-        <span class="ml-3">Play Trailer</span>
-    </button>
-</div>
-
+                <div class="mt-10">
+                    <button id="playTrailerBtn" class="flex items-center bg-red-600 text-white rounded-lg font-semibold px-6 py-3 hover:bg-red-700 transition duration-200">
+                        <img src="{{ asset('images/play.svg') }}" alt="Play" class="w-6 h-6">
+                        <span class="ml-3">Play Trailer</span>
+                    </button>
+                </div>
 
                 <div id="trailerContainer" class="mt-6 hidden">
                     <h3 class="text-xl font-semibold text-gray-800">Trailer:</h3>
-                    <div id="trailerIframeContainer" class="mt-4">
-                    </div>
+                    <div id="trailerIframeContainer" class="mt-4"></div>
                 </div>
 
                 <script>
@@ -67,7 +75,6 @@
 
                     playTrailerBtn.addEventListener('click', function () {
                         trailerContainer.classList.remove('hidden');
-
                         trailerIframeContainer.innerHTML = `
                             <iframe width="100%" height="315" 
                                 src="https://www.youtube.com/embed/${videoKey}?autoplay=1" 
@@ -75,7 +82,6 @@
                                 allowfullscreen>
                             </iframe>
                         `;
-
                         trailerContainer.scrollIntoView({ behavior: 'smooth' });
                     });
                 </script>
@@ -88,10 +94,10 @@
     </div>
 </div>
 
+{{-- Cast --}}
 <div class="movie-cast border-b border-gray-800 bg-black">
     <div class="container mx-auto px-4 py-16">
         <h2 class="text-4xl font-semibold text-white">Cast</h2>
-
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 mt-8">
             @foreach (array_slice($movie['credits']['cast'], 0, 5) as $cast)
                 <div class="mt-8">
@@ -114,7 +120,7 @@
     </div>
 </div>
 
-
+{{-- Images --}}
 <div class="movie-images bg-black">
     <div class="container mx-auto px-4 py-16">
         <h2 class="text-4xl font-semibold text-white">Images</h2>

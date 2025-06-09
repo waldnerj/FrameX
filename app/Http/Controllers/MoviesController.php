@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Watchlist;
 
 class MoviesController extends Controller
 {
@@ -34,15 +36,25 @@ class MoviesController extends Controller
     }
 
     public function show($id)
-    {
-        $movie = Http::withToken(config('services.tmdb.token'))
-            ->get('https://api.themoviedb.org/3/movie/'.$id.'?append_to_response=credits,videos,images')
-            ->json();
+{
+    $movie = Http::withToken(config('services.tmdb.token'))
+        ->get('https://api.themoviedb.org/3/movie/'.$id.'?append_to_response=credits,videos,images')
+        ->json();
 
-        return view('movies.showMovie',[
-            'movie' => $movie,
-        ]);
+    $inWatchlist = false;
+    if (Auth::check()) {
+        $userId = Auth::id();
+
+        $inWatchlist = Watchlist::where('user_id', $userId)
+            ->where('movie_id', $id)
+            ->exists();
     }
+
+    return view('movies.showMovie', [
+        'movie' => $movie,
+        'inWatchlist' => $inWatchlist,
+    ]);
+}
 
 
 //---------------------------------------------------------------------------

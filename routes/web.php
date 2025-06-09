@@ -26,8 +26,10 @@ Route::middleware([
 ])->group(function () {
 
 
-    // Watch List Route
-    Route::get('/watchlist', [\App\Http\Controllers\WatchlistController::class, 'index'])->name('watchlist.index');
+
+    Route::get('/watchlist', [WatchlistController::class, 'index'])->name('watchlist.index');
+    Route::post('/watchlist/toggle/{movieId}', [WatchlistController::class, 'toggle'])->name('watchlist.toggle');
+    Route::delete('/watchlist/{movieId}', [WatchlistController::class, 'destroy'])->name('watchlist.destroy');
 
     // Dashboard Route (Platzhalter oder Weiterleitung)
     Route::get('/dashboard', function () {
