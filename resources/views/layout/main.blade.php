@@ -7,7 +7,6 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <!-- Alpine.js für Dropdown-Funktionalität -->
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <!-- Livewire Styles -->
     @livewireStyles
 </head>
 <body class="font-sans bg-black text-white">
@@ -116,7 +115,6 @@
 
     @yield('content')
 
-    <!-- Livewire Scripts -->
     @livewireScripts
 </body>
 </html>
