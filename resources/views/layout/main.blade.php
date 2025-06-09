@@ -7,6 +7,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <!-- Alpine.js für Dropdown-Funktionalität -->
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Livewire Styles -->
+    @livewireStyles
 </head>
 <body class="font-sans bg-black text-white">
     <nav class="border-b border-gray-800">
@@ -33,13 +35,9 @@
 
             <!-- Search Bar and Auth Section -->
             <div class="flex flex-col md:flex-row items-center space-x-4">
-                <!-- Search Bar -->
+                <!-- Search Bar - Now using Livewire Component -->
                 <div class="relative mt-3 md:mt-0">
-                    <input
-                        type="text"
-                        class="bg-gray-800 text-sm rounded-full w-64 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-600 placeholder-gray-400"
-                        placeholder="Search"
-                    />
+                    @livewire('search-dropdown')
                 </div>
 
                 <!-- Auth Section -->
@@ -117,5 +115,8 @@
     </nav>
 
     @yield('content')
+
+    <!-- Livewire Scripts -->
+    @livewireScripts
 </body>
 </html>
