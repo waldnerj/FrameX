@@ -9,7 +9,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('watchlists', function (Blueprint $table) {
-            $table->dropForeign(['movie_id']);
+            // $table->dropForeign(['movie_id']);
             // Wir behalten die Spalte, nur ohne FK
         });
     }
