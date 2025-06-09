@@ -4,81 +4,70 @@ namespace App\Livewire;
 
 use Illuminate\Support\Facades\Http;
 use Livewire\Component;
-use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\Reactive;
 
 class SearchDropdown extends Component
 {
     public $search = '';
     public $searchResults = [];
     public $showDropdown = false;
-    public $isLoading = false;
-    public $debugInfo = '';
 
+    // Add this method to force re-render
     public function updatedSearch()
     {
-        $this->isLoading = true;
-        $this->debugInfo = '';
-        
         if (strlen($this->search) >= 2) {
-            try {
-                // Check if token exists
-                $token = config('services.tmdb.token');
-                if (!$token) {
-                    $this->debugInfo = 'TMDB token not configured';
-                    $this->isLoading = false;
-                    return;
-                }
-
-                // Make API request
-                $response = Http::withToken($token)
-                    ->get('https://api.themoviedb.org/3/search/multi', [
-                        'query' => $this->search,
-                        'include_adult' => false, // Changed to false for better results
-                        'language' => 'en-US',
-                        'page' => 1
-                    ]);
-
-                if ($response->successful()) {
-                    $results = $response->json('results', []);
-                    $this->debugInfo = 'API returned ' . count($results) . ' results';
-                    
-                    // Less restrictive filtering - only require media_type
-                    $this->searchResults = collect($results)
-                        ->filter(function ($result) {
-                            return in_array($result['media_type'] ?? '', ['movie', 'tv']);
-                        })
-                        ->take(6)
-                        ->toArray();
-                    
-                    $this->debugInfo .= ', after filtering: ' . count($this->searchResults);
-                    
-                    $this->showDropdown = true;
-                } else {
-                    $this->debugInfo = 'API Error: ' . $response->status() . ' - ' . $response->body();
-                    $this->searchResults = [];
-                    $this->showDropdown = false;
-                }
-                
-            } catch (\Exception $e) {
-                $this->debugInfo = 'Exception: ' . $e->getMessage();
-                $this->searchResults = [];
-                $this->showDropdown = false;
-                Log::error('Search error: ' . $e->getMessage());
-            }
+            $this->performSearch();
         } else {
-            $this->searchResults = [];
-            $this->showDropdown = false;
-            $this->debugInfo = 'Search too short';
+            $this->clearResults();
         }
-        
-        $this->isLoading = false;
+    }
+
+    public function performSearch()
+    {
+        try {
+            $response = Http::withToken(config('services.tmdb.token'))
+                ->get('https://api.themoviedb.org/3/search/multi', [
+                    'query' => $this->search,
+                    'include_adult' => false,
+                    'language' => 'en-US',
+                    'page' => 1
+                ]);
+
+            if ($response->successful()) {
+                $results = $response->json('results', []);
+                
+                // Filter and limit results
+                $this->searchResults = collect($results)
+                    ->filter(function ($result) {
+                        return in_array($result['media_type'] ?? '', ['movie', 'tv']);
+                    })
+                    ->take(6)
+                    ->values() // Reset array keys
+                    ->toArray();
+                
+                $this->showDropdown = count($this->searchResults) > 0;
+                
+                // Force component to re-render
+                $this->dispatch('search-updated');
+            } else {
+                $this->clearResults();
+            }
+        } catch (\Exception $e) {
+            $this->clearResults();
+        }
+    }
+
+    public function clearResults()
+    {
+        $this->searchResults = [];
+        $this->showDropdown = false;
+        $this->dispatch('search-cleared');
     }
 
     public function selectResult($id, $mediaType)
     {
+        $this->clearResults();
         $this->search = '';
-        $this->searchResults = [];
-        $this->showDropdown = false;
         
         if ($mediaType === 'movie') {
             return redirect()->route('movies.showMovie', $id);
@@ -92,7 +81,7 @@ class SearchDropdown extends Component
         $this->showDropdown = false;
     }
 
-    public function showDropdown()
+    public function showDropdownIfResults()
     {
         if (!empty($this->searchResults)) {
             $this->showDropdown = true;
